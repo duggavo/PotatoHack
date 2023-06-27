@@ -16,9 +16,9 @@ import net.potatohack.other_feature.OtherFeature;
 import net.potatohack.settings.ColorSetting;
 import net.potatohack.settings.EnumSetting;
 
-@SearchTags({"wurst logo", "top left corner"})
+@SearchTags({"potato logo", "top left corner", "logo"})
 @DontBlock
-public final class WurstLogoOtf extends OtherFeature
+public final class PotatoLogoOtf extends OtherFeature
 {
 	private final ColorSetting bgColor = new ColorSetting("Background",
 		"Background color.\n"
@@ -31,9 +31,9 @@ public final class WurstLogoOtf extends OtherFeature
 	private final EnumSetting<Visibility> visibility =
 		new EnumSetting<>("Visibility", Visibility.values(), Visibility.ALWAYS);
 	
-	public WurstLogoOtf()
+	public PotatoLogoOtf()
 	{
-		super("WurstLogo", "Shows the Wurst logo and version on the screen.");
+		super("PotatoLogo", "Shows the PotatoHack logo and version on the screen.");
 		addSetting(bgColor);
 		addSetting(txtColor);
 		addSetting(visibility);

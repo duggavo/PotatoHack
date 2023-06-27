@@ -31,7 +31,7 @@ public final class OtfList
 	public final TranslationsOtf translationsOtf = new TranslationsOtf();
 	public final VanillaSpoofOtf vanillaSpoofOtf = new VanillaSpoofOtf();
 	public final WurstCapesOtf wurstCapesOtf = new WurstCapesOtf();
-	public final WurstLogoOtf wurstLogoOtf = new WurstLogoOtf();
+	public final PotatoLogoOtf wurstLogoOtf = new PotatoLogoOtf();
 	public final ZoomOtf zoomOtf = new ZoomOtf();
 	
 	private final TreeMap<String, OtherFeature> otfs =

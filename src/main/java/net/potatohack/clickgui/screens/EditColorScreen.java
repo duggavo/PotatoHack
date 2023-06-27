@@ -41,7 +41,7 @@ public final class EditColorScreen extends Screen
 	private ButtonWidget doneButton;
 	
 	private final Identifier paletteIdentifier =
-		new Identifier("wurst", "colorpalette.png");
+		new Identifier("potato", "colorpalette.png");
 	private BufferedImage paletteAsBufferedImage;
 	
 	private int paletteX = 0;

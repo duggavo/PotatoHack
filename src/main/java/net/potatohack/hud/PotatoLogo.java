@@ -22,17 +22,17 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.potatohack.PotatoHack;
-import net.potatohack.other_features.WurstLogoOtf;
+import net.potatohack.other_features.PotatoLogoOtf;
 
-public final class WurstLogo
+public final class PotatoLogo
 {
 	private static final Identifier texture =
-		new Identifier("wurst", "potato_128.png");
+		new Identifier("potato", "potato_128.png");
 	
 	public void render(DrawContext context)
 	{
 		MatrixStack matrixStack = context.getMatrices();
-		WurstLogoOtf otf = PotatoHack.INSTANCE.getOtfs().wurstLogoOtf;
+		PotatoLogoOtf otf = PotatoHack.INSTANCE.getOtfs().wurstLogoOtf;
 		if(!otf.isVisible())
 			return;
 		

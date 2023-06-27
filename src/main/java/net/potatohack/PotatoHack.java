@@ -151,7 +151,7 @@ public enum PotatoHack
 	private Path createWurstFolder()
 	{
 		Path dotMinecraftFolder = MC.runDirectory.toPath().normalize();
-		Path wurstFolder = dotMinecraftFolder.resolve("wurst");
+		Path wurstFolder = dotMinecraftFolder.resolve("potato");
 		
 		try
 		{
@@ -160,7 +160,7 @@ public enum PotatoHack
 		}catch(IOException e)
 		{
 			throw new RuntimeException(
-				"Couldn't create .minecraft/wurst folder.", e);
+				"Couldn't create .minecraft/potato folder.", e);
 		}
 		
 		return wurstFolder;

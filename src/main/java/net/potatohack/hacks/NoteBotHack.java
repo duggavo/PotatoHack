@@ -150,8 +150,15 @@ public class NoteBotHack extends Hack implements UpdateListener, RenderListener 
 		tick = 0;
 		System.out.println(String.format("reading %s", nbsfile.getSelectedFile()));
 		boolean multiNoteEnabled = multiNote.isChecked();
-		song = NoteBot.parseNbs(nbsfile.getSelectedFile(), cutoff.isChecked(), multiNoteEnabled,
+		try {
+			song = NoteBot.parseNbs(nbsfile.getSelectedFile(), cutoff.isChecked(), multiNoteEnabled,
 				minVelocity.getValueI(), mapInstrument.getSelected().instrument);
+		} catch (Error err) {
+			System.out.println(err);
+			ChatUtils.error("Could not load song.");
+			this.setEnabled(false);
+			return;
+		}
 		System.out.println(song.formatRequirements());
 		ChatUtils.message(
 				String.format("§3[Name]:§f %s §3[Author]:§f %s §3[Format]:§f %s §3[Length]:§f %d §3[Notes]:§f %d",

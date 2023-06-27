@@ -35,7 +35,7 @@ import net.potatohack.options.WurstOptionsScreen;
 public abstract class GameMenuScreenMixin extends Screen
 {
 	private static final Identifier wurstTexture =
-		new Identifier("wurst", "potato_128.png");
+		new Identifier("potato", "potato_128.png");
 	
 	private ButtonWidget wurstOptionsButton;
 	

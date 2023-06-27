@@ -19,7 +19,7 @@ import net.potatohack.events.GUIRenderListener;
 
 public final class IngameHUD implements GUIRenderListener
 {
-	private final WurstLogo wurstLogo = new WurstLogo();
+	private final PotatoLogo potatoLogo = new PotatoLogo();
 	private final HackListHUD hackList = new HackListHUD();
 	private TabGui tabGui;
 	
@@ -40,7 +40,7 @@ public final class IngameHUD implements GUIRenderListener
 		
 		clickGui.updateColors();
 		
-		wurstLogo.render(context);
+		potatoLogo.render(context);
 		hackList.render(context, partialTicks);
 		tabGui.render(context, partialTicks);
 		
