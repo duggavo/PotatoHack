@@ -66,6 +66,7 @@
   "description.wurst.hack.extraelytra": "Rende l'Elytra più facile da usare.",
   "description.wurst.hack.fancychat": "Sostituisce i caratteri ASCII nei messaggi inviati in chat con caratteri Unicode più elaborati. Può essere utilizzato per aggirare i filtri delle parolacce su alcuni server.\nNon funziona su server che bloccano i caratteri Unicode.",
   "description.wurst.hack.fastbreak": "Ti fa rompere i blocchi più velocemente.\nConsiglio: Funziona bene con il Nuker.",
+  "description.wurst.hack.fastfall": "Ti fa cadere più velocemente.",
   "description.wurst.hack.fastladder": "Ti fa usare le scale a pioli più velocemente.",
   "description.wurst.hack.fastplace": "Ti fa piazzare i blocchi 5 volte più velocemente.\nConsiglio: Può rendere più veloci le operazioni fatte con altre hack, come la AutoBuild.",
   "description.wurst.hack.feedaura": "Nutre automaticamente gli animali intorno a te.",
