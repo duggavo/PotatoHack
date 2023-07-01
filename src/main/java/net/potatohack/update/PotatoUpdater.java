@@ -54,7 +54,7 @@ public final class PotatoUpdater implements UpdateListener
 		try
 		{
 			WsonArray wson = JsonUtils.parseURLToArray(
-				"https://api.github.com/repos/duggavo/Potato-MCX2/releases");
+				"https://api.github.com/repos/duggavo/PotatoHack/releases");
 			
 			for(WsonObject release : wson.getAllObjects())
 			{
