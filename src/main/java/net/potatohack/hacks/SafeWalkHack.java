@@ -32,6 +32,9 @@ public final class SafeWalkHack extends Hack
 	
 	private boolean sneaking;
 	
+	private final String renderName =
+		Math.random() < 0.01 ? "SafuWalk" : getName();
+
 	public SafeWalkHack()
 	{
 		super("SafeWalk");
@@ -52,6 +55,12 @@ public final class SafeWalkHack extends Hack
 	{
 		if(sneaking)
 			setSneaking(false);
+	}
+
+	@Override
+	public String getRenderName()
+	{
+		return renderName;
 	}
 	
 	public void onClipAtLedge(boolean clipping)

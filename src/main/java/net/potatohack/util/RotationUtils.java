@@ -55,6 +55,18 @@ public enum RotationUtils
 		float f3 = MathHelper.sin(-serverPitch * 0.017453292F);
 		return new Vec3d(f1 * f2, f3, f * f2);
 	}
+
+	public static Vec3d rotToVec3d(Rotation rot)
+	{
+		float serverYaw = rot.getYaw();
+		float serverPitch = rot.getPitch();
+		
+		float f = MathHelper.cos(-serverYaw * 0.017453292F - (float)Math.PI);
+		float f1 = MathHelper.sin(-serverYaw * 0.017453292F - (float)Math.PI);
+		float f2 = -MathHelper.cos(-serverPitch * 0.017453292F);
+		float f3 = MathHelper.sin(-serverPitch * 0.017453292F);
+		return new Vec3d(f1 * f2, f3, f * f2);
+	}
 	
 	public static Rotation getNeededRotations(Vec3d vec)
 	{
@@ -135,7 +147,17 @@ public enum RotationUtils
 		Vec3d end = start.add(getServerLookVec().multiply(range));
 		return box.raycast(start, end).isPresent();
 	}
-	
+	/**
+	 * Returns true if the player is facing anywhere within the given box
+	 * and is no further away than the given range.
+	 */
+	public static boolean isFacingBox(Box box, double range, Rotation dir)
+	{
+		Vec3d start = getEyesPos();
+		Vec3d end = start.add(rotToVec3d(dir).multiply(range));
+		return box.raycast(start, end).isPresent();
+	}
+
 	public static float getHorizontalAngleToLookVec(Vec3d vec)
 	{
 		Rotation needed = getNeededRotations(vec);

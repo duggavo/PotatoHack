@@ -51,7 +51,7 @@ import net.potatohack.util.EntityUtils;
 import net.potatohack.util.RenderUtils;
 import net.potatohack.util.RotationUtils;
 
-@SearchTags({"bow aimbot"})
+@SearchTags({"bow aimbot", "aim", "bow", "arrow"})
 public final class BowAimbotHack extends Hack
 	implements UpdateListener, RenderListener, GUIRenderListener
 {

@@ -38,6 +38,11 @@ public class FriendsList
 		save();
 	}
 	
+	public void add(String name)
+	{
+		friends.add(name);
+	}
+	
 	public void removeAndSave(String name)
 	{
 		friends.remove(name);
@@ -50,6 +55,11 @@ public class FriendsList
 		save();
 	}
 	
+	public void removeAll()
+	{
+		friends.clear();
+	}
+
 	public void middleClick(Entity entity)
 	{
 		if(entity == null || !(entity instanceof PlayerEntity))
@@ -103,7 +113,7 @@ public class FriendsList
 		save();
 	}
 	
-	private void save()
+	public void save()
 	{
 		try
 		{

@@ -49,13 +49,9 @@ public final class IpCmd extends Command
 	{
 		ServerInfo lastServer = LastServerRememberer.getLastServer();
 		if(lastServer == null || MC.isIntegratedServerRunning())
-			return "127.0.0.1:25565";
+			return "127.0.0.1";
 		
-		String ip = lastServer.address;
-		if(!ip.contains(":"))
-			ip += ":25565";
-		
-		return ip;
+		return lastServer.address;
 	}
 	
 	@Override

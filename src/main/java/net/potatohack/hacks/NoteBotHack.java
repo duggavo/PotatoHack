@@ -28,6 +28,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.RaycastContext;
 import net.potatohack.Category;
+import net.potatohack.PotatoHack;
 import net.potatohack.SearchTags;
 import net.potatohack.events.RenderListener;
 import net.potatohack.events.UpdateListener;
@@ -48,8 +49,14 @@ import org.apache.commons.io.FileUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -84,15 +91,16 @@ public class NoteBotHack extends Hack implements UpdateListener, RenderListener 
 			"notebot",
 			(folder) -> {
 				String[] files = {
-						"Fuer Elise.nbs",
-						"Fugue In D Minor.nbs",
-						"Happy.nbs",
-						"Heidi.nbs",
-						"Hes A Pirate.nbs",
-						"Megalovania.nbs",
-						"Never Gonna Give You Up.nbs",
-						"Spooky Scary Skeletons.nbs",
-						"Star Wars.nbs"
+					"songs.playlist",
+					"Fur Elise.nbs",
+					"Fugue In D Minor.nbs",
+					"Happy.nbs",
+					"Heidi.nbs",
+					"Hes A Pirate.nbs",
+					"Megalovania.nbs",
+					"Never Gonna Give You Up.nbs",
+					"Spooky Scary Skeletons.nbs",
+					"Star Wars.nbs"
 				};
 
 				try {
@@ -119,10 +127,15 @@ public class NoteBotHack extends Hack implements UpdateListener, RenderListener 
 	private final EnumSetting<TuneModes> tuneMode = new EnumSetting<>("Tune mode", TuneModes.values(),
 			TuneModes.NORMAL);
 	private final CheckboxSetting loop = new CheckboxSetting("Loop", "loop", false);
+	private final CheckboxSetting shuffle = new CheckboxSetting("Shuffle", "Shuffles the playlist", true);
+	private final CheckboxSetting chat = new CheckboxSetting("Chat", "Sends the song in chat", false);
 	private final CheckboxSetting test = new CheckboxSetting("Test mode", "test", false);
 
 	private VertexBuffer solidBox;
 	private VertexBuffer outlinedBox;
+
+	private boolean isPlayingPlaylist = false;
+	public String chatMessage = "Now playing $name by $author";
 
 	public NoteBotHack() {
 		super("NoteBot");
@@ -140,18 +153,93 @@ public class NoteBotHack extends Hack implements UpdateListener, RenderListener 
 		addSetting(tune);
 		addSetting(tuneMode);
 		addSetting(loop);
+		addSetting(shuffle);
+		addSetting(chat);
 		addSetting(test);
 	}
 
+	List<String> Playlist = new ArrayList<String>();
+
 	@Override
 	protected void onEnable() {
+		EVENTS.add(UpdateListener.class, this);
+		EVENTS.add(RenderListener.class, this);
+
+		if (nbsfile.getSelectedFile().toString().endsWith(".playlist")) {
+			isPlayingPlaylist = true;
+			
+			InputStream is;
+			try {
+				is = new FileInputStream(nbsfile.getSelectedFile().toString());
+			} catch (Exception e) {
+				System.out.println("Playlist file does not exist!");
+				e.printStackTrace();
+				this.setEnabled(false);
+				return;
+			}
+
+			Playlist = readFile(is);
+			if (shuffle.isChecked()) {
+				Collections.shuffle(Playlist);
+			}
+			playNextInPlaylist();
+		} else {
+			isPlayingPlaylist = false;
+			playSong(nbsfile.getSelectedFile());
+		}
+	}
+
+	private void playNextInPlaylist() {
+		if (Playlist.size() == 0) {
+			if (loop.isChecked()) {
+				this.setEnabled(false);
+				this.setEnabled(true);
+			} else {
+				isPlayingPlaylist = false;
+			}
+			return;
+		}
+
+		status = Status.IDLE;
+		tick = 0;
+
+		noteToBlocks.clear();
+		blocksNotTuned.clear();
+		blocksAdjNeeded.clear();
+
+		Stream.of(solidBox, outlinedBox).filter(Objects::nonNull)
+			.forEach(VertexBuffer::close);
+		Stream.of(playingBoxes, tunedBoxes, tuningBoxes).filter(Objects::nonNull)
+			.forEach(HashSet::clear);
+
+
+		String toPlay = Playlist.remove(0);
+		playSong(PotatoHack.INSTANCE.getWurstFolder().resolve("notebot").resolve(toPlay).toFile().toPath());
+		return;
+	}
+
+	private List<String> readFile(InputStream inputStream) {
+		List<String> out = new ArrayList<String>();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				out.add(line);
+	        }
+    	} catch (Exception e) {
+			System.out.println("Error reading playlist file!");
+			e.printStackTrace();
+		}
+		return out;
+	}
+
+	private void playSong(Path selectedFile) {
 		WURST.getHax().freecamHack.setEnabled(false);
 		status = Status.IDLE;
 		tick = 0;
-		System.out.println(String.format("reading %s", nbsfile.getSelectedFile()));
+		System.out.println(String.format("reading %s", selectedFile));
 		boolean multiNoteEnabled = multiNote.isChecked();
 		try {
-			song = NoteBot.parseNbs(nbsfile.getSelectedFile(), cutoff.isChecked(), multiNoteEnabled,
+			song = NoteBot.parseNbs(selectedFile, cutoff.isChecked(), multiNoteEnabled,
 				minVelocity.getValueI(), mapInstrument.getSelected().instrument);
 		} catch (Error err) {
 			System.out.println(err);
@@ -164,7 +252,10 @@ public class NoteBotHack extends Hack implements UpdateListener, RenderListener 
 				String.format("§3[Name]:§f %s §3[Author]:§f %s §3[Format]:§f %s §3[Length]:§f %d §3[Notes]:§f %d",
 						song.name, song.author, song.format, song.length, song.notes.values().size()));
 
-		EVENTS.add(UpdateListener.class, this);
+		if (chat.isChecked()) {
+			String message = chatMessage.replace("$name", song.name).replace("$author", song.author);
+			MC.getNetworkHandler().sendChatMessage(message);
+		}
 
 		if (test.isChecked()) {
 			tick = -20;
@@ -236,7 +327,6 @@ public class NoteBotHack extends Hack implements UpdateListener, RenderListener 
 
 		tick = -5;
 		status = doTune ? Status.TUNING : Status.PLAYING;
-		EVENTS.add(RenderListener.class, this);
 
 		Stream.of(solidBox, outlinedBox).filter(Objects::nonNull)
 				.forEach(VertexBuffer::close);
@@ -266,24 +356,36 @@ public class NoteBotHack extends Hack implements UpdateListener, RenderListener 
 		blocksAdjNeeded.clear();
 	}
 
+	public void skipSong() {
+		if (status == Status.IDLE || !isPlayingPlaylist) {
+			return;
+		}
+
+		playNextInPlaylist();
+	}
+
 	@Override
 	public String getRenderName() {
 		String name = getName();
 
 		switch (status) {
-			case TUNING -> {
+			case TUNING:
 				name += " [Tuning]";
-			}
-			case TESTING -> {
-				name += " [Testing]";
-			}
-			case PLAYING -> {
+			break;
+			case TESTING:
+				if (tick >= 0 && song.length > 0) {
+					name += " [Testing] "+ Integer.toString((int)((float)tick/(float)song.length*100))+"%";
+				} else {
+					name += " [Testing]";
+				}
+			break;
+			case PLAYING:
 				if (tick >= 0 && song.length > 0) {
 					name += " [Playing] "+ Integer.toString((int)((float)tick/(float)song.length*100))+"%";
 				} else {
 					name += " [Playing]";
 				}
-			}
+			break;
 		}
 		if (loop.isChecked()) {
 			name += " [Loop]";
@@ -294,25 +396,27 @@ public class NoteBotHack extends Hack implements UpdateListener, RenderListener 
 	@Override
 	public void onUpdate() {
 		switch (status) {
-			case IDLE -> {
+			case IDLE:
 				return;
-			}
-			case TESTING -> {
+			case TESTING:
 				if (tick >= 0) {
 					NoteBot.playNote(song.notes, tick);
 				}
 				tick++;
 				if (tick > song.length) {
 					ChatUtils.message(String.format("Played %s", song.name));
-					if (loop.isChecked() && song.length > 0) {
+					if (isPlayingPlaylist) {
+						playNextInPlaylist();
+						return;
+					} else if (loop.isChecked() && song.length > 0) {
 						tick = -20;
 						return;
 					}
 					setEnabled(false);
 					return;
 				}
-			}
-			case TUNING -> {
+			break;
+			case TUNING:
 				try {
 					TuneModes mode = tuneMode.getSelected();
 					if (mode.safe && MC.player.age % 3 != 0)
@@ -375,8 +479,8 @@ public class NoteBotHack extends Hack implements UpdateListener, RenderListener 
 					ChatUtils.error("Can't tune some blocks.");
 					setEnabled(false);
 				}
-			}
-			case PLAYING -> {
+			break;
+			case PLAYING:
 				if (!MC.interactionManager.getCurrentGameMode().isSurvivalLike()) {
 					ChatUtils.error("Must be in survival.");
 					setEnabled(false);
@@ -412,14 +516,17 @@ public class NoteBotHack extends Hack implements UpdateListener, RenderListener 
 				tick++;
 				if (tick > song.length) {
 					ChatUtils.message(String.format("Played %s", song.name));
-					if (loop.isChecked() && song.length > 0) {
+					if (isPlayingPlaylist) {
+						playNextInPlaylist();
+						return;
+					} else if (loop.isChecked() && song.length > 0) {
 						tick = -20;
 						playingBoxes.clear();
 						return;
 					}
 					setEnabled(false);
 				}
-			}
+			break;
 		}
 	}
 

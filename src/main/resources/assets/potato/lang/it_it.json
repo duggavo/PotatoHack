@@ -116,7 +116,7 @@
   "description.wurst.hack.nooverlay": "Blocca gli overlay di lava e acqua.",
   "description.wurst.hack.nopumpkin": "Blocca la copertura di quando indossi una zucca in testa.",
   "description.wurst.hack.noslowdown": "Rimuove la lentezza applicata da blocchi come la sabbia delle anime o i blocchi di miele.",
-  "description.wurst.hack.notebot": "Riproduce musica usando blocchi sonori.",
+  "description.wurst.hack.notebot": "Riproduce musica usando blocchi sonori.\nUsa .skip per saltare la musica attuale in una playlist.",
   "description.wurst.hack.noweather": "Consente di modificare il tempo, l'ora e le fasi lunari lato client.",
   "description.wurst.hack.noweb": "Rimuove la lentezza applicata dalle ragnatele.",
   "description.wurst.hack.nuker": "Distrugge i blocchi intorno a te automaticamente.",

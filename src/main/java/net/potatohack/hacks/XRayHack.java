@@ -128,10 +128,8 @@ public final class XRayHack extends Hack implements UpdateListener,
 		ISimpleOption<Double> gammaOption =
 			(ISimpleOption<Double>)(Object)MC.options.getGamma();
 		
-		// TODO: Why does this use 0.5 instead of
-		// FullBright's defaultGamma setting?
 		if(!WURST.getHax().fullbrightHack.isEnabled())
-			gammaOption.forceSetValue(0.5);
+			gammaOption.forceSetValue(WURST.getHax().fullbrightHack.defaultGamma.getValue());
 	}
 	
 	@Override

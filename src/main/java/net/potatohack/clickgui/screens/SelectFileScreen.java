@@ -10,6 +10,7 @@ package net.potatohack.clickgui.screens;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
@@ -202,6 +203,7 @@ public final class SelectFileScreen extends Screen
 		{
 			super(mc, screen.width, screen.height, 36, screen.height - 64, 20);
 			this.mc = mc;
+			Collections.sort(list);
 			this.list = list;
 		}
 		

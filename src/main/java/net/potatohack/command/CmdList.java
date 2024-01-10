@@ -20,6 +20,7 @@ public final class CmdList
 	public final AddAltCmd addAltCmd = new AddAltCmd();
 	public final AnnoyCmd annoyCmd = new AnnoyCmd();
 	public final AuthorCmd authorCmd = new AuthorCmd();
+	public final AutoFriendsCmd autoFriendsCmd = new AutoFriendsCmd();
 	public final BindCmd bindCmd = new BindCmd();
 	public final BindsCmd bindsCmd = new BindsCmd();
 	public final BlinkCmd blinkCmd = new BlinkCmd();
@@ -58,8 +59,10 @@ public final class CmdList
 	public final SetCheckboxCmd setCheckboxCmd = new SetCheckboxCmd();
 	public final SetColorCmd setColorCmd = new SetColorCmd();
 	public final SetModeCmd setModeCmd = new SetModeCmd();
+	public final SetNotebotMessageCmd setNotebotMessageCmd = new SetNotebotMessageCmd();
 	public final SetSliderCmd setSliderCmd = new SetSliderCmd();
 	public final SettingsCmd settingsCmd = new SettingsCmd();
+	public final SkipCmd skipCmd = new SkipCmd();
 	public final TacoCmd tacoCmd = new TacoCmd();
 	public final TCmd tCmd = new TCmd();
 	public final TooManyHaxCmd tooManyHaxCmd = new TooManyHaxCmd();

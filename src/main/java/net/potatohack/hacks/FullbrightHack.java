@@ -32,7 +32,7 @@ public final class FullbrightHack extends Hack implements UpdateListener
 	private final CheckboxSetting fade = new CheckboxSetting("Fade",
 		"Slowly fades between brightness and darkness.", true);
 	
-	private final SliderSetting defaultGamma = new SliderSetting(
+	public final SliderSetting defaultGamma = new SliderSetting(
 		"Default brightness",
 		"Fullbright will set your brightness slider back to this value when you turn it off.",
 		0.5, 0, 1, 0.01, ValueDisplay.PERCENTAGE);
